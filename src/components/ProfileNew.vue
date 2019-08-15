@@ -3,45 +3,58 @@
     <div class="user">
       <img
         class="img"
-        :src="profileData.avatar"
+        :src="profileData.avatar | https"
       />
       <span class="name">{{profileData.name}}</span>
     </div>
-    <div class="question">
-      <span>我提过的问题{{profileData.questionsNum}}个</span>
+
+    <div
+      class="question"
+      @click="handleProfileQuestionClick(profileData.id)"
+    >
+      <span>我提过的问题 {{profileData.questionsNum}} 个</span>
       <div class="front-icon">
         <BaseFront />
       </div>
     </div>
-    <div class="comment">
-      <span>我收到的评论{{profileData.answersNum}}个</span>
+
+    <!-- <div
+      class="comment"
+      @click="handleProfileAnswerClick('comment')"
+    >
+      <span>我收到的评论 {{profileData.answersNum}} 个</span>
       <div class="front-icon">
         <BaseFront />
       </div>
-    </div>
+    </div> -->
+
   </div>
 </template>
 
 <script>
 import BaseFront from "@/assets/svg/BaseFront.svg";
 export default {
-  name: "ProfileNew",
+  name: "profileNew",
   components: {
     BaseFront
   },
   props: {
-    isLoadingIdentity: {
-      type: Boolean,
-      required: false
-    },
     profileData: {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    handleProfileQuestionClick (id) {
+      this.$router.push({ name: 'profileQuestion', query: { id } })
+    },
+    handleProfileAnswerClick (type) {
+      this.$router.push({ name: 'profileAnswer', query: { type } })
+    },
   }
 };
 </script>
 
 <style lang="less" scoped>
-@import '../assets/styles/profile.less';
+@import "../assets/styles/profile.less";
 </style>

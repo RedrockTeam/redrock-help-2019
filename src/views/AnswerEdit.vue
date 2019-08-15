@@ -1,20 +1,18 @@
 <template>
   <div>
-    <header class="header">
+    <header>
       <VBack />
-      <div @click="handelQuestionPublished">
+      <div @click="handelAnswerPublished">
         <vPublishButton />
       </div>
     </header>
-    <EditBox />
+    <div class="question">{{ oneQuestion.content }}</div>
+    <div class="title">问题回答</div>
+    <EditAnswerBox />
     <EditImage />
     <VPopup
       :massage="progressMassage"
       v-if="editProgress"
-    />
-    <VPopup
-      :massage="tagTipsMassage"
-      v-if="isShowTagTips"
     />
     <VPopup
       :massage="wordsMassage"
@@ -27,52 +25,43 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import EditBox from '@/components/EditBox'
+import EditAnswerBox from '@/components/EditAnswerBox'
 import EditImage from '@/components/EditImage'
-import { FETCH_PUBLISH_QUESTION, EDIT_LEAVE } from '../store/type/actions';
+import { FETCH_PUBLISH_ANSWER, EDIT_LEAVE } from '../store/type/actions';
 import { END_PORGRESSING } from '../store/type/mutations';
 
 export default {
-  name: 'questionEdit',
+  name: 'answerEdit',
   components: {
-    EditBox,
+    EditAnswerBox,
     EditImage
   },
   data () {
     return {
       progressMassage: '发布中，请稍后...',
-      tagTipsMassage: '你最少需要选择一个标签',
       wordsMassage: '你的输入必须大于 4 个字符',
-      isShowTagTips: false,
-      tagTipsTimer: null,
       subscriber: null,
       isShowWordsTips: false,
       timer: null,
     }
   },
   computed: {
-    ...mapGetters(['editProgress', 'editTags', 'editWord']),
+    ...mapGetters(['oneQuestion', 'editProgress', 'editWord'])
   },
   beforeRouteLeave (_, __, next) {
     this.$store.dispatch(EDIT_LEAVE)
     next()
   },
   methods: {
-    handelQuestionPublished () {
-      if (this.editTags.length === 0) {
-        this.isShowTagTips = true
-        clearTimeout(this.tagTipsTimer)
-        this.tagTipsTimer = setTimeout(() => {
-          this.isShowTagTips = false
-        }, 1500)
-      } else if (this.editWord.length < 4) {
+    handelAnswerPublished () {
+      if (this.editWord.length < 4) {
         this.isShowWordsTips = true
         clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
+        this.timer = setTimeout(()=>{
           this.isShowWordsTips = false
         }, 1500)
       } else {
-        this.$store.dispatch(FETCH_PUBLISH_QUESTION)
+        this.$store.dispatch(FETCH_PUBLISH_ANSWER, this.oneQuestion.id)
         // 订阅完成发布的事件
         this.subscriber = this.$store.subscribe(async (mutation, state) => {
           if (mutation.type === END_PORGRESSING) {
@@ -82,16 +71,26 @@ export default {
           }
         })
       }
+
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.header {
+header {
   margin: 30px;
   display: flex;
   justify-content: space-between;
 }
+.question {
+  margin: 30px;
+  font-size: 32px;
+  line-height: 40px;
+}
+.title {
+  margin: 30px 0 20px 30px;
+  font-size: 28px;
+  color: @fontColor;
+}
 </style>
-

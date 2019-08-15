@@ -8,11 +8,11 @@ import {
 
 import {
   FETCH_START,
+  FETCH_END,
   SET_PROFILE_IDENTITY,
 } from './type/mutations'
 
 const initialState = {
-  isLoading: false,
   data: {},
 }
 
@@ -21,27 +21,25 @@ const state = { ...initialState }
 const actions = {
   async [FETCH_PROFILE_IDENTITY]({ commit }) {
     commit(FETCH_START)
-    const { data } = await ProfileService.identify()
-    commit(SET_PROFILE_IDENTITY, data)
+    try {
+      const { data } = await ProfileService.identify()
+      commit(FETCH_END)
+      commit(SET_PROFILE_IDENTITY, data)
+    } catch (error) {
+      commit(FETCH_END)
+    }
   }
 }
 
 const mutations = {
-  [FETCH_START](state) {
-    state.isLoading = true
-  },
   [SET_PROFILE_IDENTITY](state, data) {
     state.data = data
-    state.isLoading = false
   }
 }
 
 const getters = {
   profileIdentity(state) {
     return state.data
-  },
-  isLoadingIdentity(state) {
-    return state.isLoading
   },
 }
 

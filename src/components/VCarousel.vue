@@ -1,7 +1,7 @@
 <template>
-  <div class="v-carousel">
-    <header>
-      <BaseBackSvg @click="handelBackClick"/>
+  <div class="v-carousel" @touchstart.prevent>
+    <header @touchstart="handelBackClick">
+      <BaseBackSvg />
       <span>{{ pageNum }}/{{ totalPageNum }}</span>
     </header>
 
@@ -18,7 +18,7 @@
         v-for="(item, index) of imagesUrl"
         :key="index"
       >
-        <img :src="item">
+        <img :src="`${imgUrl}/getImage?imageName=${item.split('/')[3]}`">
       </slide>
     </carousel>
   </div>
@@ -56,6 +56,9 @@ export default {
   computed: {
     totalPageNum () {
       return this.imagesUrl.length
+    },
+    imgUrl () {
+      return process.env.VUE_APP_API
     }
   },
   methods: {
@@ -92,6 +95,10 @@ export default {
     z-index: 1;
     display: flex;
     align-items: center;
+    width: 100%;
+    span {
+      margin: 0 30px;
+    }
   }
   .carousel {
     & /deep/ .VueCarousel-wrapper {
@@ -106,7 +113,8 @@ export default {
     .slide {
       img {
         max-height: 80vh;
-        width: 100vw;
+        max-width: 100%;
+        margin: 0 auto;
       }
     }
   }

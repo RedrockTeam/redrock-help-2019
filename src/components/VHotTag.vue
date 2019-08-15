@@ -27,12 +27,18 @@ export default {
     }
   },
   methods: {
-    handelItemClick(index) {
-      this.$emit("hotTagClick", index);
-      this.$set(this.whichItemsClicked, index, 1);
+    handelItemClick (index) {
+      this.$emit("hotTagClick", index)
+      if (this.whichItemsClicked[index]) {
+        this.$set(this.whichItemsClicked, index, 0);
+        this.$emit('hotTagRemove', index)
+      } else {
+        this.$set(this.whichItemsClicked, index, 1);
+        this.$emit('hotTagAdd', index)
+      }
     }
   },
-  data() {
+  data () {
     return {
       whichItemsClicked: Array(this.hotTagData.length + 1)
     };

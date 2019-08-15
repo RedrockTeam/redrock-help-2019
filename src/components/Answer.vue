@@ -1,49 +1,32 @@
 <template>
   <div class="v-answer">
+    <div class="no-content" v-if="isNoContent">空空如也，快来回答一个</div>
     <div
       v-for="item of answersData"
       :key="item.id"
       class="answer"
     >
       <div class="user">
-        <img :src="item.author.avatar">
+        <img :src="item.author.avatar | https">
         <span class="name">{{ item.author.name }}</span>
       </div>
       <div class="content">{{ item.content }}</div>
+      <div class="images">
+        <VImageForAnswer :imagesUrl="item.photoUrls" />
+      </div>
       <div class="info">
         <div class="time">{{ item.createdAt | date }}</div>
-        <div class="action">
-          <div
-            :class="{ active: item.isApproval }"
-            @click="handelApprovalClick(item.id, item.isApproval)"
-          >
-            <AnswerApprovalSvg />
-            {{ item.approvalNum }}
-          </div>
-          <div
-            :class="{ active: item.isOppose }"
-            @click="handelOpposeClick(item.id, item.isOppose)"
-          >
-            <AnswerOpposeSvg />
-            {{ item.opposeNum }}
-          </div>
-        </div>
+        <AnswerAction :item="item" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {  
-  FETCH_ANSWER_APPROVAL,
-  FETCH_ANSWER_OPPOSE,
-} from '@/store/type/actions'
-
-import AnswerApprovalSvg from '@/assets/svg/AnswerApproval.svg'
-import AnswerOpposeSvg from '@/assets/svg/AnswerOppose.svg'
+import AnswerAction from '@/components/AnswerAction'
 
 export default {
-  name: 'vAnswer',
+  name: 'answer',
   props: {
     answersData: {
       type: Array,
@@ -51,15 +34,19 @@ export default {
     }
   },
   components: {
-    AnswerApprovalSvg,
-    AnswerOpposeSvg,
+    AnswerAction,
+  },
+  computed: {
+    isNoContent () {
+      return this.answersData.length === 0
+    }
   },
   methods: {
-    handelApprovalClick (answerId, isApproval) {
-      if (!isApproval) this.$store.dispatch(FETCH_ANSWER_APPROVAL, answerId)
+    handelApprovalClick (answerId, isOppose) {
+      if (!isOppose) this.$store.dispatch(FETCH_ANSWER_APPROVAL, answerId)
     },
-    handelOpposeClick (answerId, isOppose) {
-      if (!isOppose) this.$store.dispatch(FETCH_ANSWER_OPPOSE, answerId)
+    handelOpposeClick (answerId, isApproval) {
+      if (!isApproval) this.$store.dispatch(FETCH_ANSWER_OPPOSE, answerId)
     }
   }
 }
@@ -68,6 +55,9 @@ export default {
 <style lang="less" scoped>
 .v-answer {
   margin: 0 28px;
+  .no-content {
+    text-align: center;
+  }
   .answer {
     margin-bottom: 32px;
     border: 2px solid @mainColor;
@@ -88,6 +78,10 @@ export default {
     }
     .content {
       padding: 20px;
+      line-height: 40px;
+    }
+    .images {
+      margin: 0 20px 20px 20px;
     }
     .info {
       display: flex;
@@ -95,7 +89,7 @@ export default {
       line-height: 30px;
       color: @fontColor;
       justify-content: space-between;
-      margin: 0 20px 15px 20px;
+      margin: 0 20px 20px 20px;
       .action {
         display: flex;
         align-items: center;
@@ -103,7 +97,7 @@ export default {
         div {
           display: flex;
           align-items: center;
-          margin: 0 4px;
+          margin: 0 10px;
           svg {
             margin: 0 4px;
             height: 30px;

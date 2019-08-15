@@ -11,7 +11,17 @@ const userNew = require('./userNew.json')
 const userOld = require('./userOld.json')
 
 module.exports = {
-  port: 8080,
+  port: 8088,
+  proxy: {
+    '/api1': {
+      target: 'http://202.202.43.234/seniorhelpme/', //对应自己的接口
+      changeOrigin: true,
+      ws: true,
+      pathRewrite: {
+        '^/api1': ''
+      }
+    }
+  },
   before (app) {
     // search
     app.get('/api/search/hot', (req, res) => {
@@ -82,7 +92,7 @@ module.exports = {
       res.json(questions)
     })
 
-    app.get('/api/user/answers', (req, res) => {
+    app.get('/api/user/answers*', (req, res) => {
       res.json(answers)
     })
 

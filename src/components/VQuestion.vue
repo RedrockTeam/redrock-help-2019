@@ -1,5 +1,9 @@
 <template>
-  <div class="v-question">
+  <div
+    class="v-question"
+    v-if="!isLoading"
+  >
+    <div class="no-content" v-if="isNoContent">空空如也，快来提一个问题</div>
     <div
       class="question"
       v-for="item of questionData"
@@ -9,19 +13,22 @@
       <div class="user">
         <img
           class="img"
-          :src="item.author.avatar"
+          :src="item.author.avatar | https"
         >
         <span class="name">{{ item.author.name }}</span>
-        <span class="time">{{ item.updatedAt | date }}</span>
+        <span class="time">{{ item.createdAt | date }}</span>
       </div>
       <div class="content">{{ item.content }}</div>
       <div class="info">
         <div class="tags">
-          <div v-for="innerItem of item.tags" :key="innerItem.id">
+          <div
+            v-for="innerItem of item.tags"
+            :key="innerItem.id"
+          >
             {{ innerItem.name }}
           </div>
         </div>
-        <div class="count">{{ item.answersCount }}条评论</div>
+        <div class="count">{{ item.answersCount }} 条回答</div>
       </div>
     </div>
   </div>
@@ -29,24 +36,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { FETCH_NEXT_QUESTIONS } from '../store/type/actions';
 
 export default {
   name: 'vQuestion',
   props: {
-    isLoading: {
-      type: Boolean,
-      required: false,
-    },
     questionData: {
       type: Array,
       required: true,
     }
   },
-  methods: {
-    handelQuestionBoxClick(id) {
-      this.$router.push({ name: 'question', query: { id } })
+  computed: {
+    ...mapGetters(['isLoading']),
+    isNoContent () {
+      return this.questionData.length === 0
     }
-  }
+  },
+  methods: {
+    handelQuestionBoxClick (id) {
+      this.$router.push({ name: 'question', query: { id } })
+    },
+  },
 }
 
 </script>
@@ -77,6 +88,7 @@ export default {
       }
     }
     .content {
+      @nowrap();
       padding: 20px;
     }
     .info {
@@ -84,7 +96,14 @@ export default {
       font-size: 22px;
       color: @fontColor;
       justify-content: space-between;
-      margin: 0 20px 15px 20px;
+      margin: 0 20px 20px 20px;
+      .tags {
+        display: flex;
+        @nowrap();
+        div {
+          margin: 0 5px;
+        }
+      }
     }
   }
 }

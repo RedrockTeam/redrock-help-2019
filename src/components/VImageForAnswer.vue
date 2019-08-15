@@ -1,6 +1,11 @@
 <template>
   <div class="v-image">
-    <VCarousel :imagesUrl="imagesUrl" v-if="isShowCarousel" @close="handelCloseClick" :navigateTo="navigateTo"/>
+    <VCarousel
+      :imagesUrl="imagesUrl"
+      v-if="isShowCarousel"
+      @close="handelCloseClick"
+      :navigateTo="navigateTo"
+    />
     <div
       v-for="(item, index) of showImages"
       :key="index"
@@ -29,7 +34,7 @@
 
 <script>
 export default {
-  name: 'vImage',
+  name: 'vImageForAnswer',
   props: {
     imagesUrl: {
       type: Array,
@@ -85,27 +90,27 @@ export default {
   .item {
     position: relative;
     &.four {
-      width: 163px;
-      height: 163px;
+      width: 154px;
+      height: 154px;
     }
     img {
       border-radius: 10px;
       object-fit: cover;
       &.one {
         width: 100%;
-        height: 410px;
+        height: 400px;
       }
       &.two {
-        width: 334px;
-        height: 250px;
+        width: 320px;
+        height: 240px;
       }
       &.three {
-        width: 220px;
-        height: 180px;
+        width: 210px;
+        height: 170px;
       }
       &.four {
-        width: 163px;
-        height: 163px;
+        width: 154px;
+        height: 154px;
       }
     }
   }

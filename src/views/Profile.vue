@@ -1,7 +1,20 @@
 <template>
-  <div v-if="!isLoadingIdentity">
-    <ProfileNew v-if="isNew" :isloadingIdentity="isLoadingIdentity" :profileData="profileIdentity" />
-    <ProfileOld v-if="isOld" :isloadingIdentity="isLoadingIdentity" :profileData="profileIdentity" />
+  <div class="profile">
+    <VLoading
+      :number="1"
+      v-if="isLoading"
+      class="loading"
+    />
+    <template v-else>
+      <ProfileNew
+        v-if="isNew"
+        :profileData="profileIdentity"
+      />
+      <ProfileOld
+        v-else
+        :profileData="profileIdentity"
+      />
+    </template>
   </div>
 </template>
 
@@ -10,7 +23,6 @@ import { mapGetters } from "vuex";
 import { FETCH_PROFILE_IDENTITY } from "@/store/type/actions";
 import ProfileNew from "@/components/ProfileNew";
 import ProfileOld from "@/components/ProfileOld";
-import profileIdentify from "../store/profileIdentify";
 
 export default {
   name: "profile",
@@ -18,20 +30,20 @@ export default {
     ProfileNew,
     ProfileOld
   },
-  mounted() {
+  mounted () {
     this.$store.dispatch(FETCH_PROFILE_IDENTITY);
   },
-
   computed: {
-    ...mapGetters(["isLoadingIdentity", "profileIdentity"]),
-    isNew() {
-      if (this.profileIdentity.role == "新生") return true;
-      else return false;
+    ...mapGetters(["profileIdentity", "isLoading"]),
+    isNew () {
+      return parseInt(localStorage.getItem('role')) === 1
     },
-    isOld() {
-      if (this.profileIdentity.role == "志愿者") return true;
-      else return false;
-    }
   }
 };
 </script>
+
+<style lang="less" scoped>
+.loading {
+  margin-top: 30px; 
+}
+</style>

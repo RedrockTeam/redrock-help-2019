@@ -2,10 +2,21 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
 import HomeHot from '@/views/HomeHot.vue'
+import HomeNew from '@/views/HomeNew.vue'
+import HomeTag from '@/views/HomeTag.vue'
+import Search from '@/views/Search.vue'
+import Profile from '@/views/Profile.vue'
+import ProfileQuestion from '@/views/ProfileQuestion.vue'
+import ProfileAnswer from '@/views/ProfileAnswer.vue'
+import QuestionEdit from '@/views/QuestionEdit.vue'
+import AnswerEdit from '@/views/AnswerEdit.vue'
+import Question from '@/views/Question.vue'
+
+import ga from 'vue-ga'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -19,34 +30,53 @@ export default new Router({
         {
           path: 'new',
           name: 'homeNew',
-          component: () => import('@/views/HomeNew.vue')
+          component: HomeNew,
         },
       ]
     },
     {
       path: '/tag',
       name: 'homeTag',
-      component: () => import('@/views/HomeTag.vue')
+      component: HomeTag,
     },
     {
       path: '/search',
       name: 'search',
-      component: () => import('@/views/Search.vue')
+      component: Search,
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/views/Profile.vue')
+      component: Profile,
+    },
+    {
+      path: '/profile/question',
+      name: 'profileQuestion',
+      component: ProfileQuestion,
+    },
+    {
+      path: '/profile/answer',
+      name: 'profileAnswer',
+      component: ProfileAnswer,
     },
     {
       path: '/questionEdit',
       name: 'questionEdit',
-      component: () => import('@/views/QuestionEdit.vue')
+      component: QuestionEdit,
+    },
+    {
+      path: '/answserEdit',
+      name: 'answserEdit',
+      component: AnswerEdit,
     },
     {
       path: '/question',
       name: 'question',
-      component: () => import('@/views/Question.vue')
-    }
+      component: Question,
+    },
   ]
 })
+
+ga(router, process.env.VUE_APP_GA)
+
+export default router
