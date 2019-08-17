@@ -1,6 +1,9 @@
 <template>
   <div class="v-answer">
-    <div class="no-content" v-if="isNoContent">空空如也，快来回答一个</div>
+    <div
+      class="no-content"
+      v-if="isNoContent"
+    >空空如也，快来回答一个</div>
     <div
       v-for="item of answersData"
       :key="item.id"
@@ -8,9 +11,12 @@
     >
       <div class="user">
         <img :src="item.author.avatar | https">
-        <span class="name">{{ item.author.name }}</span>
+        <span class="name">{{ item.author.name | name }}</span>
       </div>
-      <div class="content">{{ item.content }}</div>
+      <div
+        class="content"
+        v-text="item.content"
+      ></div>
       <div class="images">
         <VImageForAnswer :imagesUrl="item.photoUrls" />
       </div>
@@ -57,6 +63,7 @@ export default {
   margin: 0 28px;
   .no-content {
     text-align: center;
+    color: @fontColor;
   }
   .answer {
     margin-bottom: 32px;
@@ -79,6 +86,7 @@ export default {
     .content {
       padding: 20px;
       line-height: 40px;
+      word-wrap: break-word;
     }
     .images {
       margin: 0 20px 20px 20px;

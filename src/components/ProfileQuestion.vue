@@ -1,27 +1,29 @@
 <template>
-  <div
-    class="profile-question"
-  >
+  <div class="profile-question">
     <div
       class="box"
       v-for="item of questionData"
       :key="item.id"
     >
-      <p
-        class="content"
-        @click="handelQuestionClick(item.id)"
-      >{{item.content}}</p>
-
-      <div class="tips">
-        <span class="time">{{item.createdAt | date}}</span>
-        <!-- <span class="comment">{{item.answersCount}}条评论</span> -->
-        <span class="comment"></span>
+      <div class="fix">
+        <p
+          class="content"
+          @click="handelQuestionClick(item.id)"
+          v-text="item.content"
+        ></p>
         <span
           class="solve"
           @click="handelSolveClick(item.id)"
           v-if="item.status === '未解决'"
-        >解决该问题</span>
-
+        >设定为已解决</span>
+        <span
+          class="solve"
+          v-if="item.status === '已解决'"
+        >已解决</span>
+      </div>
+      <div class="tips">
+        <span class="time">{{item.createdAt | date}}</span>
+        <span class="comment">{{item.answerCount}} 条评论</span>
         <span
           class="delete"
           @click="handelDeleteClick(item.id)"
@@ -110,6 +112,15 @@ export default {
   margin: 30px;
   padding: 30px;
   border-radius: 10px;
+  .fix {
+    display: flex;
+    justify-content: space-between;
+    .solve {
+      min-width: 150px;
+      text-align: end;
+      font-size: 24px;
+    }
+  }
   .content {
     height: 40px;
     margin-bottom: 30px;
@@ -124,9 +135,6 @@ export default {
       &.comment {
         display: block;
         margin: 0 30px 0 auto;
-      }
-      &.solve {
-        margin-right: 30px;
       }
     }
   }

@@ -1,4 +1,9 @@
 export default http => {
-  // 解决时区问题
-  return http.replace(/^http/,"https")
+  let https;
+  try {
+    https = http ? http.replace(/^http/,"https") : http
+  } catch (error) {
+    https = http
+  }
+  return https
 }

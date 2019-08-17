@@ -10,7 +10,7 @@
         v-if="questionListNoMore"
       >没有更多了</div>
     </div>
-    <HomeEditButton />
+    <HomeEditButton v-if="isShowHomeEditButton"/>
   </div>
 </template>
 
@@ -39,6 +39,9 @@ export default {
         }
       });
       return `${tagName} 分类下的问题`
+    },
+    isShowHomeEditButton () {
+      return parseInt(localStorage.getItem('role')) === 1
     }
   },
   beforeRouteEnter (_, from, next) {
@@ -58,7 +61,7 @@ export default {
 
 <style lang="less" scoped>
 .question {
-  padding-top: 20px;
+  padding-top: 32px;
 }
 .no-more {
   text-align: center;
