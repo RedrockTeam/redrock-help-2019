@@ -20,7 +20,10 @@
         >
         <span class="name">{{ item.author.name }}</span>
       </div>
-      <div class="content" v-text="item.content"></div>
+      <div
+        class="content"
+        v-text="item.content"
+      ></div>
       <div class="info">
         <span class="time">{{ item.createdAt | date }}</span>
         <div class="count">{{ item.answersCount }} 条回答</div>
@@ -81,6 +84,9 @@ export default {
         border-radius: 86px;
         background: @mainColor;
         margin: 20px;
+      }
+      .name {
+        font-size: 26px;
       }
       .time {
         color: #c7c7c7 !important;

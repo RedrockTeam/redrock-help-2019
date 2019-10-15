@@ -35,9 +35,8 @@ export default {
   top: 70px;
   left: 0;
   right: 0;
-  height: 220px;
+  height: 200px;
   overflow: hidden;
   background-color: @backgroundColor;
-  border-bottom: 1px solid @borderColor;
 }
 </style>
